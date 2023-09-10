@@ -1,5 +1,5 @@
 // import Home from './src/pages/Home'
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StatusBar} from 'react-native';
 
 import {NavigationContainer} from '@react-navigation/native'

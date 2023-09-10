@@ -29,6 +29,11 @@ export default function Signin(){
                 <TouchableOpacity style={styles.buttonRegister} onPress={() => navigation.navigate('Register')}>
                     <Text style={styles.registerText}>Não possui uma conta? Cadastre-se</Text>
                 </TouchableOpacity>
+
+                <TouchableOpacity style={styles.buttonRegister}>
+                    <Text style={styles.registerText}>Recupere sua senha</Text>
+                </TouchableOpacity>
+
             </Animatable.View>
         </View>
     );
