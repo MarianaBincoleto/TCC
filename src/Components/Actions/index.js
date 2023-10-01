@@ -1,8 +1,10 @@
-import React from 'react';
-import {View,Text,StyleSheet,TouchableOpacity,ScrollView} from 'react-native';
+import React from 'react'
+import {View,Text,StyleSheet,TouchableOpacity,ScrollView} from 'react-native'
 import {AntDesign} from '@expo/vector-icons'
-export default function Actions(){
+import {useNavigation} from '@react-navigation/native'
 
+export default function Actions(){
+    const navigation = useNavigation();
 return(
     <ScrollView style={styles.container} horizontal= {true} showsHorizontalScrollIndicator={false}> 
 
@@ -27,12 +29,27 @@ return(
         <Text style={styles.labelButton}>Carteira</Text>
     </TouchableOpacity>
 
-    <TouchableOpacity style={styles.actionButton}>
+    <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate('Conta')}>
         <View style={styles.areaButton}>
         <AntDesign name="setting" size={26} color="#000"/>
         </View>
         <Text style={styles.labelButton}>Conta</Text>
     </TouchableOpacity>
+
+    <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate('Help_page')}>
+        <View style={styles.areaButton}>
+        <AntDesign name="help" size={26} color="#000"/>
+        </View>
+        <Text style={styles.labelButton}>Ajuda</Text>
+    </TouchableOpacity>
+
+    <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate('Welcome')}>
+        <View style={styles.areaButton}>
+        <AntDesign name="logout" size={26} color="#000"/>
+        </View>
+        <Text style={styles.labelButton}>Sair</Text>
+    </TouchableOpacity>
+
     </ScrollView>
 );
 }
