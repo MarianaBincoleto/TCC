@@ -1,50 +1,97 @@
 import React from 'react';
-import {View, Text, StyleSheet, TextInput, TouchableOpacity} from 'react-native';
+import {useState} from 'react';
+import {View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView} from 'react-native';
 import * as Animatable from 'react-native-animatable'
 import {useNavigation} from '@react-navigation/native'
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../firebaseConnection';
 
 export default function Register(){
     const navigation = useNavigation();
+    const [userNome, setNome] = useState('');
+    const [userDt_Nasc, setDt_Nasc] = useState('');
+    const [userEmail, setEmail] = useState('');
+    const [userPassword, setPassword] = useState('');
+    const [userConfPassword, setConfPassword] = useState('');
+
+function newUSer(){
+    if (userNome === '' || userDt_Nasc ==='' || userEmail ==='' || userPassword === '' || userConfPassword ===''){
+        alert("Todos os campos devem ser preenchidos");
+        return;
+    }
+    if (userPassword !==userConfPassword){
+        alert("A senha e a confirmação não são iguais");
+        return;
+    } else {
+        createUserWithEmailAndPassword(auth, userEmail, userPassword)
+        .then ((USerCredential) => {
+            const user = USerCredential.user;
+            alert("O usuário " + userEmail +" foi criado. Faça o login");
+            navigation.navigate('Signin');
+        })
+        .catch((error) => {
+            const errorMessage = error.message;
+            alert(errorMessage);
+            navigation.navigate('Register');
+        })
+    }
+}
+
+
     return(
-        <View style={styles.container}> 
+        <KeyboardAvoidingView style={styles.container}
+        behavior={Platform.OS =="ios" ? "padding" : "height"}
+        keyboardVerticalOffset={80}
+        > 
+        <ScrollView>
             <Animatable.View animation="fadeInLeft" delay={500} style={styles.containerHeader}>
                 <Text style={styles.message}> Bem-vindo(a) </Text>
             </Animatable.View>
 
             <Animatable.View animation="fadeInUp" style={styles.containerform}>
                 <Text style={styles.title}> Nome </Text>
-                <TextInput 
+                <TextInput style={styles.input}
                 placeholder="Digite seu nome..."
-                style={styles.input}/>
+                value={userNome}
+                onChangeText={setNome}
+                />
 
                 <Text style={styles.title}> Data de Nascimento </Text>
-                <TextInput 
+                <TextInput style={styles.input}
                 placeholder="Digite sua data de nascimento..."
-                style={styles.input}/>
+                value={userDt_Nasc}
+                onChangeText={setDt_Nasc}
+                />
 
                 <Text style={styles.title}> Email </Text>
-                <TextInput 
+                <TextInput style={styles.input}
                 placeholder="Digite um email..."
-                style={styles.input}/>
+                value={userEmail}
+                onChangeText={setEmail}
+                />
 
                 <Text style={styles.title}> Senha </Text>
-                <TextInput 
+                <TextInput style={styles.input}
                 placeholder="Digite sua senha..."
-                style={styles.input}/>
+                value={userPassword}
+                onChangeText={setPassword}
+                />
 
                 <Text style={styles.title}> Confirme senha </Text>
-                <TextInput 
+                <TextInput style={styles.input}
                 placeholder="Confirme sua senha..."
-                style={styles.input}/>
+                value={userConfPassword}
+                onChangeText={setConfPassword}
+                />                
 
-                
-
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Signin')}>
+                <TouchableOpacity style={styles.button} onPress={newUSer}>
                     <Text style={styles.buttonText}>Cadastrar</Text>
                 </TouchableOpacity>
 
             </Animatable.View>
-        </View>
+
+            </ScrollView>
+        </KeyboardAvoidingView>
     );
 }
 

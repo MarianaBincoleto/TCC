@@ -1,21 +1,17 @@
-// Import the functions you need from the SDKs you need
-import firebase from "firebase/app";
-import 'firebase/database';
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import {getAuth} from "firebase/auth";
 
-// Your web app's Firebase configuration
+
 const firebaseConfig = {
-  apiKey: "AIzaSyBbDysPYrNMX5iHHWwvSTPlI_WrVUjFSb8",
-  authDomain: "projecao-financeira.firebaseapp.com",
-  projectId: "projecao-financeira",
-  storageBucket: "projecao-financeira.appspot.com",
-  messagingSenderId: "35650256515",
-  appId: "1:35650256515:web:dd2a089a6e3a73335be5b6"
+  apiKey: "AIzaSyATNJUSzaqwXouZFtspPcHe-vsSfjd0QTE",
+  authDomain: "projecao-financeira1.firebaseapp.com",
+  projectId: "projecao-financeira1",
+  storageBucket: "projecao-financeira1.appspot.com",
+  messagingSenderId: "686263431685",
+  appId: "1:686263431685:web:70de29acce558a097e226c",
+  measurementId: "G-8FWMKEC378"
 };
 
-// Initialize Firebase
-if (!firebase.apps.length){
-    firebase.initializeApp(firebaseConfig);
-}
-export default firebase;
+export const firebase = initializeApp(firebaseConfig);
+export const auth = getAuth(firebase);
