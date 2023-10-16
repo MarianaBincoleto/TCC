@@ -2,6 +2,7 @@ import React from 'react'
 import {View,Text,StyleSheet,TouchableOpacity,ScrollView} from 'react-native'
 import {AntDesign} from '@expo/vector-icons'
 import {useNavigation} from '@react-navigation/native'
+import { Feather } from '@expo/vector-icons'
 
 export default function Actions(){
     const navigation = useNavigation();
@@ -38,7 +39,7 @@ return(
 
     <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate('Help_page')}>
         <View style={styles.areaButton}>
-        <AntDesign name="help" size={26} color="#000"/>
+        <Feather name="help-circle" size={24} color="black" />
         </View>
         <Text style={styles.labelButton}>Ajuda</Text>
     </TouchableOpacity>

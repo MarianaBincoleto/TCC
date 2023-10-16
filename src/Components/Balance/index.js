@@ -37,7 +37,7 @@ export default function Balance({saldo, gastos}) {
         borderRadius: 4,
         paddingTop: 22,
         paddingBottom: 22,
-        zIndex: 99,
+        // zIndex: 99,
     },
     itemTitle: {
         fontSize: 20,

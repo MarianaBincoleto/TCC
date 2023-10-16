@@ -1,8 +1,11 @@
-import { StyleSheet, Text, View, FlatList} from 'react-native';
+import { StyleSheet, Text, View, FlatList,TouchableOpacity } from 'react-native';
 import Header from '../../Components/Header/Index';
 import Balance from '../../Components/Balance';
 import Moviments from '../../Components/Moviments';
 import Actions from '../../Components/Actions';
+import { useState } from 'react';
+import ModalButton from '../../Components/ModalButton';
+import { Ionicons } from '@expo/vector-icons'; 
 
 const list = [
   {
@@ -30,22 +33,36 @@ const list = [
 
 
 export default function Home() {
+  const [modal, setModal] = useState(false)
+
   return (
     <View style={styles.container}>
-        <Header name="Mariana"/>
-        <Balance saldo="9.250,90" gastos="-250,00"/>
+      <Header name="Mariana" />
+      <Balance saldo="9.250,90" gastos="-250,00" />
 
-        <Actions/>
-        <Text style={styles.title}> Últimas Movimentações</Text>
+      <Actions />
+      <Text style={styles.title}> Últimas Movimentações</Text>
 
-        <FlatList
+      <FlatList
         style={styles.list}
         data={list}
-        keyExtractor={(item)=> String(item.id)}
+        keyExtractor={(item) => String(item.id)}
         showsVerticalScrollIndicator={false}
-        renderItem={({item}) => <Moviments data= {item}/>}
+        renderItem={({ item }) => <Moviments data={item} />}
+      />
+
+       <View style={styles.buttonADD}> 
+       <TouchableOpacity style={styles.button} onPress={() => setModal(true)}>
+        <Ionicons name="add-circle" size={80} color="#00CC93" />
+        </TouchableOpacity>
+       </View>
+
+        <ModalButton
+          show={modal}
+          close={() => setModal(false)}
         />
-    </View>
+      </View>
+
   );
 }
 
@@ -63,6 +80,8 @@ const styles = StyleSheet.create({
   list: {
     marginStart: 14,
     marginEnd: 14,
+  },
+  buttonADD: {
+    alignItems: "center",
   }
-
 });
