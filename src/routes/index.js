@@ -5,6 +5,8 @@ import Register from '../pages/Register'
 import Home from '../pages/Home'
 import Help_page from '../pages/Help_page'
 import Conta from '../pages/Conta'
+import ReplacePass from '../pages/ReplacePass'
+
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +41,11 @@ export default function routes(){
             <Stack.Screen
                 name="Conta"
                 component={Conta}
+                options={{headerShown: false}}
+            />
+            <Stack.Screen
+                name="ReplacePass"
+                component={ReplacePass}
                 options={{headerShown: false}}
             />
         </Stack.Navigator>

@@ -55,7 +55,7 @@ function userLogin(){
                     <Text style={styles.registerText}>Não possui uma conta? Cadastre-se</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.buttonRegister}>
+                <TouchableOpacity style={styles.buttonRegister} onPress={() => navigation.navigate('ReplacePass')}>
                     <Text style={styles.registerText}>Recupere sua senha</Text>
                 </TouchableOpacity>
 
