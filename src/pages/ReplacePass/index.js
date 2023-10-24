@@ -23,7 +23,7 @@ export default function ReplacePass() {
                 return;
             })
         } else{
-            alert("Informe e-mail cadastro")
+            alert("Informe e-mail cadastrado")
         }
     }
 return(
@@ -37,7 +37,7 @@ return(
 
         <Text style={styles.formTitle}>Redefinição de senha</Text>
             <TextInput style={styles.inputRecup}
-            placeholder="Digite um email..."
+            placeholder="Digite e-mail cadastrado..."
             keyboardType='email-address'
             autoCapitalize='none'
             autoComplete='email'

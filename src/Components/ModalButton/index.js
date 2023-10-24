@@ -1,24 +1,29 @@
 import React from 'react';
 import { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Animated, Dimensions } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Animated, Dimensions, TextInput } from 'react-native'
 import RNPickerSelect from 'react-native-picker-select';
+import SelectDropdown from 'react-native-select-dropdown'
 
-const { height } = Dimensions.get('window')
+export default function ModalButton({show, close }){ 
+const { height } = Dimensions.get('window');
+const [uservalor, setValor] = useState('');
+const [userParcela, setParcela] = useState('');
+const Categoria = ["Alimentação", "Saúde", "Transporte", "Outra"]
 
-const ModalButton = ({ show, close }) => {
+
   const [state, setState] = useState({
     opacity: new Animated.Value(0),
     container: new Animated.Value(height),
     modal: new Animated.Value(height)
-  })
+  });
 
   const openModal = () => {
     Animated.sequence([
       Animated.timing(state.container, { toValue: 0, duration: 100, useNativeDriver: false }),
       Animated.timing(state.opacity, { toValue: 1, duration: 300, useNativeDriver: false }),
       Animated.spring(state.modal, { toValue: 0, bounciness: 5, useNativeDriver: true })
-    ]).start()
-  }
+    ]).start();
+  };
 
   const closeModal = () => {
     Animated.sequence([
@@ -52,14 +57,38 @@ const ModalButton = ({ show, close }) => {
           ]
         }]}
       >
-       
+    <Text style={styles.titleDados}>Categoria: </Text>
+    <SelectDropdown
+	    data={Categoria}
+	    onSelect={(Categoria, index) => {
+		  console.log(Categoria, index)
+	  }}
+    />
+
+      <Text style={styles.titleDados}>Valor: </Text>
+      <TextInput style={styles.inputDados} 
+        placeholder="Digite um valor..."
+        value={uservalor}
+        onChangeText={setValor}
+      />
+
+      <Text style={styles.titleDados}>Parcelas: </Text>
+      <TextInput style={styles.inputDados} 
+        placeholder="Digite quantidade de parcelas..."
+        value={userParcela}
+        onChangeText={setParcela}
+      />
+
         <TouchableOpacity style={styles.btn} onPress={close}>
           <Text style={{ color: '#fff' }}>Close</Text>
         </TouchableOpacity>
+
       </Animated.View>
     </Animated.View>
   )
 }
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -99,10 +128,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#00CC93',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 30,
+    marginTop: 40,
     position: "absolute",
     bottom: 10,
+    marginLeft: 25,
   },
+  titleDados: {
+    fontSize: 20,
+    marginTop: 28,
+  },
+  inputDados: {
+    borderBottomWidth: 1,
+    height: 50,
+    marginBottom: 12,
+    fontSize: 16,
+    marginTop: 5,
+},
 })
 
-export default ModalButton

@@ -35,7 +35,7 @@ function userLogin(){
             <Animatable.View animation="fadeInUp" style={styles.containerform}>
                 <Text style={styles.title}> Email </Text>
                 <TextInput style={styles.input} 
-                placeholder="Digite um email..."
+                placeholder="Digite um e-mail..."
                 value={userEmail}
                 onChangeText={setEmail}
                 />
