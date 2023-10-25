@@ -69,7 +69,7 @@ const Categoria = ["Alimentação", "Saúde", "Transporte", "Educação","Outra"
     />
 
     <Text style={styles.titleDados}>Tipo de movimentação: </Text>
-    <SelectDropdown
+    <SelectDropdown 
 	    data={Movimentacao}
 	    onSelect={(Movimentacao, index) => {
 		  console.log(Movimentacao, index)
@@ -92,7 +92,7 @@ const Categoria = ["Alimentação", "Saúde", "Transporte", "Educação","Outra"
       </ScrollView>
 
       <TouchableOpacity style={styles.btn} onPress={close}>
-        <Text style={{ color: '#fff' }}>Close</Text>
+        <Text style={{ color: '#fff' }}>Salvar</Text>
       </TouchableOpacity>
 
 

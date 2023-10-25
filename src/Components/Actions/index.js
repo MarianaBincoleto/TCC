@@ -9,7 +9,7 @@ export default function Actions(){
 return(
     <ScrollView style={styles.container} horizontal= {true} showsHorizontalScrollIndicator={false}> 
 
-    <TouchableOpacity style={styles.actionButton}>
+    <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate('Carteira')}>
         <View style={styles.areaButton}>
         <AntDesign name="creditcard" size={26} color="#000"/>
         </View>
