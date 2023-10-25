@@ -66,6 +66,9 @@ function newUSer(){
                 <Text style={styles.title}> Email </Text>
                 <TextInput style={styles.input}
                 placeholder="Digite um e-mail..."
+                keyboardType='email-address'
+                autoCapitalize='none'
+                autoComplete='email'
                 value={userEmail}
                 onChangeText={setEmail}
                 />

@@ -18,9 +18,16 @@ export default function ReplacePass() {
                 navigation.navigate('Signin');
             })
             .catch((error) => {
+                console.log(error.code);
+                if(error.code === "auth/user-not-found") {
+                    alert("Email não encontrado");
+                    return error.message;
+                } 
+                else {
                 const errorMessage = error.message;
                 alert("Ops! Algo deu errado " +errorMessage + ". Tente novamente. ");
                 return;
+            }
             })
         } else{
             alert("Informe e-mail cadastrado")

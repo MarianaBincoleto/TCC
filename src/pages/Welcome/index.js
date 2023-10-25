@@ -8,9 +8,9 @@ export default function Welcome(){
     return(
         <View style={styles.container}> 
         <View style={styles.containerlogo}>
-            <Image source={require('../../assets/oie_transparent.png')}
+            {/* <Image source={require('../../assets/oie_transparent.png')}
             style={{widht: '100%'}}
-            resizeMode="contain"/>
+            resizeMode="contain"/> */}
         </View>
         <Animatable.View delay={600}animation="fadeInUp"style={styles.containerform}>
             <Text style={styles.title}> Controle de suas contas na palma das suas mãos! </Text>

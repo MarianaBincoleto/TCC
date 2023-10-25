@@ -1,7 +1,9 @@
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import {getAuth} from "firebase/auth";
-
+import * as firebase from 'firebase/app';
+// import { initializeApp } from "firebase/app";
+// import { getAnalytics } from "firebase/analytics";
+// import {getAuth} from "firebase/auth";
+import { browserLocalPersistence } from 'firebase/auth';
+import * as firebaseAuth from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: "AIzaSyATNJUSzaqwXouZFtspPcHe-vsSfjd0QTE",
@@ -13,5 +15,9 @@ const firebaseConfig = {
   measurementId: "G-8FWMKEC378"
 };
 
-export const firebase = initializeApp(firebaseConfig);
-export const auth = getAuth(firebase);
+
+const app = firebase.initializeApp(firebaseConfig);
+// export const auth = getAuth(firebase);
+export const auth = firebaseAuth.initializeAuth(app, {
+  persistence: browserLocalPersistence
+})

@@ -1,14 +1,15 @@
 import React from 'react';
 import { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Animated, Dimensions, TextInput } from 'react-native'
-import RNPickerSelect from 'react-native-picker-select';
+import { View, Text, StyleSheet, TouchableOpacity, Animated, Dimensions, TextInput,ScrollView} from 'react-native'
 import SelectDropdown from 'react-native-select-dropdown'
+
 
 export default function ModalButton({show, close }){ 
 const { height } = Dimensions.get('window');
 const [uservalor, setValor] = useState('');
 const [userParcela, setParcela] = useState('');
-const Categoria = ["Alimentação", "Saúde", "Transporte", "Outra"]
+const Movimentacao = ["Ganhos","Despesa"]
+const Categoria = ["Alimentação", "Saúde", "Transporte", "Educação","Outra","Entradas"]
 
 
   const [state, setState] = useState({
@@ -57,11 +58,21 @@ const Categoria = ["Alimentação", "Saúde", "Transporte", "Outra"]
           ]
         }]}
       >
+
+    <ScrollView> 
     <Text style={styles.titleDados}>Categoria: </Text>
-    <SelectDropdown
+    <SelectDropdown 
 	    data={Categoria}
 	    onSelect={(Categoria, index) => {
 		  console.log(Categoria, index)
+	  }}
+    />
+
+    <Text style={styles.titleDados}>Tipo de movimentação: </Text>
+    <SelectDropdown
+	    data={Movimentacao}
+	    onSelect={(Movimentacao, index) => {
+		  console.log(Movimentacao, index)
 	  }}
     />
 
@@ -72,19 +83,22 @@ const Categoria = ["Alimentação", "Saúde", "Transporte", "Outra"]
         onChangeText={setValor}
       />
 
-      <Text style={styles.titleDados}>Parcelas: </Text>
+      <Text style={styles.titleDados}>Quantidade de parcelas: </Text>
       <TextInput style={styles.inputDados} 
         placeholder="Digite quantidade de parcelas..."
         value={userParcela}
         onChangeText={setParcela}
       />
+      </ScrollView>
 
-        <TouchableOpacity style={styles.btn} onPress={close}>
-          <Text style={{ color: '#fff' }}>Close</Text>
-        </TouchableOpacity>
+      <TouchableOpacity style={styles.btn} onPress={close}>
+        <Text style={{ color: '#fff' }}>Close</Text>
+      </TouchableOpacity>
+
 
       </Animated.View>
     </Animated.View>
+
   )
 }
 
@@ -143,6 +157,6 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     fontSize: 16,
     marginTop: 5,
-},
+  },
 })
 

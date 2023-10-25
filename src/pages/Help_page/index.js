@@ -1,38 +1,39 @@
 import React from 'react'
-import {View, StyleSheet, Text, TouchableOpacity} from 'react-native'
+import {View, StyleSheet, Text,ScrollView} from 'react-native'
 import {useNavigation} from '@react-navigation/native'
+import {Ionicons, MaterialIcons} from '@expo/vector-icons'
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 export default function Help_Page(){
     const navigation = useNavigation();
 
     return(
-       <View style={styles.container}> 
-            <Text>Está precisando de ajuda? </Text>
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
-                <Text style={styles.buttontext}> Voltar </Text>
-            </TouchableOpacity>
-       </View>
+        <SafeAreaView style={styles.container}> 
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <View style={styles.titleBar}>
+                    <Ionicons name="ios-arrow-back" size={24} color="#52575D" onPress={() => navigation.navigate('Home')}></Ionicons>
+                </View>
+
+                <Text style={styles.containerText}>Está precisando de ajuda? </Text>
+            </ScrollView>
+        </SafeAreaView>
        
     );
 }
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        backgroundColor: '#ecf0f1',
-        alignItems: 'center',
-        fontSize: 24,
-        justifyContent: 'center',
+        backgroundColor: '#fff',
     },
-    button: {
-        position: 'absolute',
-        backgroundColor: '#00CC93',
-        borderRadius: 50,
-        paddingVertical: 10,
-        width: '60%',
-        alignSelf: 'center',
-        bottom: '15%',
-        alignItems: 'center',
-        justifyContent: 'center',
+    titleBar: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        marginTop: 24,
+        marginHorizontal: 16,
     },
+    containerText: {
+        textAlign: "center",
+    }
+
 })
