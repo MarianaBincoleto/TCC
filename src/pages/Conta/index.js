@@ -22,8 +22,15 @@ export default function Conta(){
 
                     <View style={styles.add}>
                         <Ionicons name="ios-add" size={60} color="#DFD8C8" style={{marginTop: 8, marginLeft: 5}}></Ionicons>
-                    </View>      
+                    </View>     
+
+                    <Text>Nome: Mariana</Text> 
+                    <Text>Email: Gabriela@gmail.com</Text> 
+                    <Text>Data de Nascimento: 20/10/2000</Text> 
+
                 </View>
+
+                
 
             </ScrollView>
        </SafeAreaView>

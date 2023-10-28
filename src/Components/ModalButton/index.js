@@ -1,17 +1,48 @@
 import React from 'react';
-import { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Animated, Dimensions, TextInput,ScrollView} from 'react-native'
-import SelectDropdown from 'react-native-select-dropdown'
-
+import { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Animated, Dimensions, TextInput,ScrollView} from 'react-native';
+import SelectDropdown from 'react-native-select-dropdown';
+import uuid from 'react-native-uuid';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { MaterialIcons } from '@expo/vector-icons'; 
+import { Ionicons } from '@expo/vector-icons'; 
 
 export default function ModalButton({show, close }){ 
 const { height } = Dimensions.get('window');
-const [uservalor, setValor] = useState('');
-const [userParcela, setParcela] = useState('');
+const [uservalor, setValor] = useState(0);
+const [userParcela, setParcela] = useState(0);
 const Movimentacao = ["Ganhos","Despesa"]
 const Categoria = ["Alimentação", "Saúde", "Transporte", "Educação","Outra","Entradas"]
+const [userCategoria, setCategoria] = useState('');
+const [userMovimentacao, setMovimentacao] = useState('');
+const [userVencimento, setVencimento] = useState('');
 
 
+  function handleNew(){
+    const id = uuid.v4();
+
+    const NewData = {
+      id,
+      Categoria: userCategoria,
+      Movimentacao: userMovimentacao,
+      Valor: uservalor, 
+      Parcela: userParcela,    
+      Vencimento: userVencimento.replace(/(\d{2})(\d{2})(\d{4})/, '$1/$2/$3'), 
+    }
+    // AsyncStorage.setItem("@financialProjection:adomesticApp",NewData);
+    close();
+    console.log(NewData);
+  }
+
+  function handleClose(){
+    setCategoria('')
+    setMovimentacao('')
+    setParcela('')
+    setValor('')
+    setVencimento('')
+    close()
+  }
+  
   const [state, setState] = useState({
     opacity: new Animated.Value(0),
     container: new Animated.Value(height),
@@ -59,21 +90,33 @@ const Categoria = ["Alimentação", "Saúde", "Transporte", "Educação","Outra"
         }]}
       >
 
+      <TouchableOpacity style={styles.bntClose}onPress={handleClose}>
+          <Ionicons name="close" size={35} color="black" />
+      </TouchableOpacity>
+
     <ScrollView> 
     <Text style={styles.titleDados}>Categoria: </Text>
     <SelectDropdown 
+      renderDropdownIcon={() => (<MaterialIcons name="add" size={24} color="black" />) }
+      buttonStyle={{borderRadius: 20}}
 	    data={Categoria}
-	    onSelect={(Categoria, index) => {
-		  console.log(Categoria, index)
+      onSelect={(selectedItem, index) => {
+      console.log(selectedItem, index);
+      setCategoria(selectedItem);
 	  }}
+    value={userCategoria} 
     />
 
     <Text style={styles.titleDados}>Tipo de movimentação: </Text>
     <SelectDropdown 
+      renderDropdownIcon={() => (<MaterialIcons name="add" size={24} color="black" />) }
+      buttonStyle={{borderRadius: 20}}
 	    data={Movimentacao}
-	    onSelect={(Movimentacao, index) => {
-		  console.log(Movimentacao, index)
+	    onSelect={(selectedItem, index) => {
+      console.log(selectedItem, index);
+      setMovimentacao(selectedItem);
 	  }}
+    value={userMovimentacao}
     />
 
       <Text style={styles.titleDados}>Valor: </Text>
@@ -81,6 +124,16 @@ const Categoria = ["Alimentação", "Saúde", "Transporte", "Educação","Outra"
         placeholder="Digite um valor..."
         value={uservalor}
         onChangeText={setValor}
+        keyboardType = 'numeric'
+      />
+
+      <Text style={styles.titleDados}>Data de vencimento: </Text>
+      <TextInput style={styles.inputDados} 
+        placeholder="Digite a data de vencimento..."
+        value={userVencimento.replace(/(\d{2})(\d{2})(\d{4})/, '$1/$2/$3')}
+        onChangeText={setVencimento}
+        keyboardType='numeric'
+        maxLength={10}
       />
 
       <Text style={styles.titleDados}>Quantidade de parcelas: </Text>
@@ -88,10 +141,12 @@ const Categoria = ["Alimentação", "Saúde", "Transporte", "Educação","Outra"
         placeholder="Digite quantidade de parcelas..."
         value={userParcela}
         onChangeText={setParcela}
+        keyboardType = 'numeric'
+        maxLength={3}
       />
       </ScrollView>
 
-      <TouchableOpacity style={styles.btn} onPress={close}>
+      <TouchableOpacity style={styles.btn} onPress={handleNew}>
         <Text style={{ color: '#fff' }}>Salvar</Text>
       </TouchableOpacity>
 
@@ -158,5 +213,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 5,
   },
+  bntClose: {
+    position: 'absolute',
+    right: 10,
+    top: 20,
+  }
 })
 
