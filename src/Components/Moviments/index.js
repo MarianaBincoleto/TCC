@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import {View,Text,StyleSheet,TouchableOpacity} from 'react-native';
+
 export default function Moviments({data}){
+    console.log('Aqui', data);
     const[showValue,setShowValue] = useState(false);
 
     return(

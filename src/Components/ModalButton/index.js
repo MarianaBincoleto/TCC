@@ -6,6 +6,8 @@ import uuid from 'react-native-uuid';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MaterialIcons } from '@expo/vector-icons'; 
 import { Ionicons } from '@expo/vector-icons'; 
+import Toast from 'react-native-toast-message';
+
 
 export default function ModalButton({show, close }){ 
 const { height } = Dimensions.get('window');
@@ -18,7 +20,7 @@ const [userMovimentacao, setMovimentacao] = useState('');
 const [userVencimento, setVencimento] = useState('');
 
 
-  function handleNew(){
+  async function handleNew(){
     const id = uuid.v4();
 
     const NewData = {
@@ -29,9 +31,13 @@ const [userVencimento, setVencimento] = useState('');
       Parcela: userParcela,    
       Vencimento: userVencimento.replace(/(\d{2})(\d{2})(\d{4})/, '$1/$2/$3'), 
     }
-    // AsyncStorage.setItem("@financialProjection:adomesticApp",NewData);
+    await AsyncStorage.setItem("@financialProjection:adomesticApp", JSON.stringify(NewData));
+    // Toast.show({
+    // type: "success",
+    // text1: "Cadastrado com sucesso"
+    // })
     close();
-    console.log(NewData);
+    // console.log(NewData);
   }
 
   function handleClose(){
