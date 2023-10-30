@@ -1,38 +1,45 @@
 import React, { useState } from 'react';
-import {View,Text,StyleSheet,TouchableOpacity} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 
-export default function Moviments({data}){
-    console.log('Aqui', data);
-    const[showValue,setShowValue] = useState(false);
+export default function Moviments({ data, onDelete }) {
+    console.log('LOG ABACATE', data);
+    const [showValue, setShowValue] = useState(false);
 
-    return(
-        <TouchableOpacity style={styles.container} onPress={() => setShowValue(!showValue) }> 
-        <Text style={styles.date}>{data.date} </Text>
-        <View style={styles.content}>
-            <Text style={styles.label}>{data.label} </Text>
+    return (
+        <TouchableOpacity style={styles.container} onPress={() => setShowValue(!showValue)}>
+            <Text style={styles.date}>{data.Vencimento}</Text>
+            <View style={styles.content}>
+                <Text style={styles.label}>{data.Categoria} </Text>
 
-            {showValue ? (
-                <Text 
-                style={data.type === 1 ? styles.value : styles.expenses}>
-                {data.type === 1 ? `R$ ${data.value}`  : `R$ -${data.value}`}
-             </Text>
-            ):(
-                <View style={styles.skeleton}> 
-                </View>
-            )}
-        </View>
+                {showValue ? (
+                    <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
+                        <Text
+                            style={data.Movimentacao === 'Ganhos' ? styles.value : styles.expenses}>
+                            {data.Movimentacao === 'Ganhos' ? `R$ ${data.Valor}` : `R$ -${data.Valor}`}
+                        </Text>
+                        <TouchableOpacity onPress={() => onDelete(data.id)}>
+                            <MaterialIcons name="delete" size={24} color="#e74c3c" />
+                        </TouchableOpacity>
+                    </View>
+                ) : (
+                    <View style={styles.skeleton}>
+                    </View>
+                )}
+            </View>
+
         </TouchableOpacity>
     );
 }
 
-const styles= StyleSheet.create({
-    container:{
+const styles = StyleSheet.create({
+    container: {
         flex: 1,
         marginBottom: 24,
         borderBottomWidth: 0.5,
         borderBottomColor: '#DADADA',
     },
-    content:{
+    content: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginTop: 2,

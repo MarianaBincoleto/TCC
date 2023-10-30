@@ -8,7 +8,7 @@ export default function Balance({saldo, gastos}) {
                 <Text style={styles.itemTitle}>Saldo</Text>
             <View style={styles.content}>
                 <Text style={styles.currencySymbol}> R$</Text>
-                <Text style={styles.Balance}> {saldo} </Text>
+                <Text style={parseFloat(saldo ? saldo.replace(',', '.') : 0) >= 0.00 ? styles.Balance : styles.BalanceNegative}> {saldo} </Text>
             </View>
             </View>
 
@@ -16,7 +16,7 @@ export default function Balance({saldo, gastos}) {
                 <Text style={styles.itemTitle}>Gastos</Text>
             <View style={styles.content}>
                 <Text style={styles.currencySymbol}> R$</Text>
-                <Text style={styles.expenses}> {gastos} </Text>
+                <Text style={styles.expenses}>-{gastos} </Text>
             </View>
             </View>
 
@@ -58,6 +58,10 @@ export default function Balance({saldo, gastos}) {
     expenses: {
         fontSize: 22,
         color: '#e74c3c',
+    },
+    BalanceNegative: {
+        fontSize: 22,
+        color:'#e74c3c',
     }
 
  })
