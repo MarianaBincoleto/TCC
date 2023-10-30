@@ -1,12 +1,13 @@
-import { StyleSheet, Text, View, FlatList,TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
 import Header from '../../Components/Header/Index';
 import Balance from '../../Components/Balance';
 import Moviments from '../../Components/Moviments';
 import Actions from '../../Components/Actions';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ModalButton from '../../Components/ModalButton';
-import { Ionicons } from '@expo/vector-icons'; 
+import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 // const list = [
@@ -37,32 +38,69 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function Home() {
   const [modal, setModal] = useState(false);
   const [list, setlist] = useState([]);
+  const [saldo, setSaldo] = useState();
+  const [gasto, setGasto] = useState();
+  const [userName, setUserName] = useState('');
+  const [email, setEmail] = useState('');
 
-  async function handleFetchList(){
-    const response = await AsyncStorage.getItem('@financialProjection:adomesticApp');
-    //  Aqui eu converti a resposta de uma string para um objeto
-    const responseObject = JSON.parse(response)
+  async function handleFetchList() {
+    // const response = await AsyncStorage.getItem('@financialProjection:adomesticApp');
+    const userEmail = await AsyncStorage.getItem('user');
+    const user = await AsyncStorage.getItem(userEmail);
+    setEmail(userEmail);
 
-    // Assim você pode acessar os valores por exemplo 
-    // Obs você precisa passar exatamente como foi salvo o valor considerando maiusculas e minusculas
-    console.log('Exibindo a categoria no log', responseObject.Categoria);
-    console.log('Exibindo o vencimento', responseObject.Vencimento);
+    const response = await AsyncStorage.getItem(`@financialProjection:${userEmail}`);
+    
+    if (user) {
+      const userData = JSON.parse(user)
+      setUserName(userData.nome);
+      console.log(userData.nome);
+    }
 
-    // Agora pra atribuir essa lista a uma variavel
-    setlist(responseObject)
-
-    // Para verificar se o valor realmete foi atribuido pode mandar outro console.log
-    console.log('Minha lista', list)
+    if (response) {
+      const responseObject = JSON.parse(response)
+      setlist(responseObject)      
+    }
   }
 
-  useEffect(() => {
+  async function handleDelete(itemId) {
+    // Filtrar a lista para remover o item com o ID correspondente
+    const updatedList = list.filter((item) => item.id !== itemId);
+
+    await AsyncStorage.setItem(`@financialProjection:${email}`, JSON.stringify(updatedList));
     handleFetchList();
-  }, []);
+  };
+
+  useFocusEffect(useCallback(() => {
+    handleFetchList();
+  }, [modal]))
+
+  useEffect(() => {
+    if (list) {
+      const listaGanhos = list.filter((item) => item.Movimentacao === 'Ganhos');
+      const listaDespesas = list.filter((item) => item.Movimentacao === 'Despesa');
+
+      const totalGanhos = listaGanhos.reduce((total, item) => {
+        const valor = parseFloat(item.Valor.replace(',', '.'));
+        return total + valor;
+      }, 0);
+
+      const totalDespesas = listaDespesas.reduce((total, item) => {
+        const valor = parseFloat(item.Valor.replace(',', '.'));
+        return total + valor;
+      }, 0);
+
+      const saldoPositivo = totalGanhos - totalDespesas;
+      console.log(saldoPositivo.toFixed(2));
+      setSaldo(saldoPositivo.toFixed(2).replace('.', ','));
+      setGasto(totalDespesas.toFixed(2).replace('.', ','));
+    }
+  }, [list])
 
   return (
     <View style={styles.container}>
-      <Header name="Mariana" />
-      <Balance saldo="9.250,90" gastos="-250,00" />
+      <Header name={userName} />
+      <Balance saldo={saldo} gastos={gasto} />
 
       <Actions />
       <Text style={styles.title}> Últimas Movimentações</Text>
@@ -70,25 +108,23 @@ export default function Home() {
       <FlatList
         style={styles.list}
         data={list}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) =>
-         <Moviments data={item} />}
+          <Moviments data={item} onDelete={handleDelete} />}
       />
 
-       <View style={styles.buttonADD}> 
-       <TouchableOpacity style={styles.button} onPress={() => setModal(true)}>
-        <Ionicons name="add-circle" size={80} color="#00CC93" />
-        </TouchableOpacity>
-       </View>
-
-        <ModalButton
-          show={modal}
-          close={() => setModal(false)}
-        />
-        <TouchableOpacity onPress={() => handleFetchList()}>
-          <Text> Chamar função</Text>
+      <View style={styles.buttonADD}>
+        <TouchableOpacity style={styles.button} onPress={() => setModal(true)}>
+          <Ionicons name="add-circle" size={80} color="#00CC93" />
         </TouchableOpacity>
       </View>
+
+      <ModalButton
+        show={modal}
+        chave={email}
+        close={() => setModal(false)}
+      />
+    </View>
 
     
   );

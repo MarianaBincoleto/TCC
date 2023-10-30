@@ -9,7 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Toast from 'react-native-toast-message';
 
 
-export default function ModalButton({show, close }){ 
+export default function ModalButton({show, close, chave }){ 
 const { height } = Dimensions.get('window');
 const [uservalor, setValor] = useState(0);
 const [userParcela, setParcela] = useState(0);
@@ -31,11 +31,22 @@ const [userVencimento, setVencimento] = useState('');
       Parcela: userParcela,    
       Vencimento: userVencimento.replace(/(\d{2})(\d{2})(\d{4})/, '$1/$2/$3'), 
     }
-    await AsyncStorage.setItem("@financialProjection:adomesticApp", JSON.stringify(NewData));
+    const response = await AsyncStorage.getItem(`@financialProjection:${chave}`);
+    const previousData = response ? JSON.parse(response) : [];
+
+    const data = [...previousData, NewData];
+
+    await AsyncStorage.setItem(`@financialProjection:${chave}`, JSON.stringify(data));
+    
     // Toast.show({
     // type: "success",
     // text1: "Cadastrado com sucesso"
     // })
+    setCategoria('');
+    setMovimentacao('');
+    setParcela('');
+    setValor('');
+    setVencimento('');
     close();
     // console.log(NewData);
   }
@@ -128,7 +139,7 @@ const [userVencimento, setVencimento] = useState('');
       <Text style={styles.titleDados}>Valor: </Text>
       <TextInput style={styles.inputDados} 
         placeholder="Digite um valor..."
-        value={uservalor}
+        value={uservalor.toString()}
         onChangeText={setValor}
         keyboardType = 'numeric'
       />
@@ -136,7 +147,7 @@ const [userVencimento, setVencimento] = useState('');
       <Text style={styles.titleDados}>Data de vencimento: </Text>
       <TextInput style={styles.inputDados} 
         placeholder="Digite a data de vencimento..."
-        value={userVencimento.replace(/(\d{2})(\d{2})(\d{4})/, '$1/$2/$3')}
+        value={userVencimento.toString().replace(/(\d{2})(\d{2})(\d{4})/, '$1/$2/$3')}
         onChangeText={setVencimento}
         keyboardType='numeric'
         maxLength={10}
@@ -145,7 +156,7 @@ const [userVencimento, setVencimento] = useState('');
       <Text style={styles.titleDados}>Quantidade de parcelas: </Text>
       <TextInput style={styles.inputDados} 
         placeholder="Digite quantidade de parcelas..."
-        value={userParcela}
+        value={userParcela.toString()}
         onChangeText={setParcela}
         keyboardType = 'numeric'
         maxLength={3}

@@ -5,6 +5,7 @@ import * as Animatable from 'react-native-animatable'
 import {useNavigation} from '@react-navigation/native'
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebaseConnection';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Register(){
     const navigation = useNavigation();
@@ -27,6 +28,14 @@ function newUSer(){
         .then ((USerCredential) => {
             const user = USerCredential.user;
             alert("O usuário " + userEmail +" foi criado. Faça o login");
+
+            const data = {
+                id: userEmail,
+                nome: userNome,
+                data_nascimento: userDt_Nasc
+              }
+            AsyncStorage.setItem(userEmail, JSON.stringify(data));
+
             navigation.navigate('Signin');
         })
         .catch((error) => {

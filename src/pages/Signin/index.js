@@ -5,6 +5,7 @@ import * as Animatable from 'react-native-animatable';
 import {useNavigation} from '@react-navigation/native';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebaseConnection';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Signin(){
     const navigation = useNavigation();
@@ -14,6 +15,7 @@ export default function Signin(){
 function userLogin(){
     signInWithEmailAndPassword(auth, userEmail, userPassword)
     .then((userCredential) => {
+        AsyncStorage.setItem('user', userEmail);
         const user= userCredential.user;
         alert('Login efetuado...')
         console.log(user);
