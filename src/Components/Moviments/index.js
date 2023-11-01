@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 export default function Moviments({ data, onDelete }) {
-    console.log('LOG ABACATE', data);
     const [showValue, setShowValue] = useState(false);
 
     return (

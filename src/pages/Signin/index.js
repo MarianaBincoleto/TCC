@@ -13,6 +13,8 @@ export default function Signin(){
     const [userPassword, setPassword] = useState('');
 
 function userLogin(){
+    // navigation.navigate('Home');
+
     signInWithEmailAndPassword(auth, userEmail, userPassword)
     .then((userCredential) => {
         AsyncStorage.setItem('user', userEmail);
