@@ -1,31 +1,32 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import * as Animatable from 'react-native-animatable'
-import {useNavigation} from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
+import oie from "../../assets/oie_transparent.png"
 
-export default function Welcome(){
+export default function Welcome() {
     const navigation = useNavigation();
-    return(
-        <View style={styles.container}> 
-        <View style={styles.containerlogo}>
-            {/* <Image source={require('../../assets/oie_transparent.png')}
-            style={{widht: '100%'}}
-            resizeMode="contain"/> */}
-        </View>
-        <Animatable.View delay={600}animation="fadeInUp"style={styles.containerform}>
-            <Text style={styles.title}> Controle de suas contas na palma das suas mãos! </Text>
-            <Text style={styles.text}> Faça o login para começar</Text>
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Signin')}>
-                <Text style={styles.buttontext}> Logar </Text>
-            </TouchableOpacity>
-        </Animatable.View>
+    return (
+        <View style={styles.container}>
+            <View style={styles.containerlogo}>
+                <Image source={oie}
+                    style={{ widht: '100%' }}
+                    resizeMode="contain" />
+            </View>
+            <Animatable.View delay={600} animation="fadeInUp" style={styles.containerform}>
+                <Text style={styles.title}> Controle de suas contas na palma das suas mãos! </Text>
+                <Text style={styles.text}> Faça o login para começar</Text>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Signin')}>
+                    <Text style={styles.buttontext}> Logar </Text>
+                </TouchableOpacity>
+            </Animatable.View>
         </View>
     );
 }
 
-const styles= StyleSheet.create ({
+const styles = StyleSheet.create({
     container: {
-        flex:1,
+        flex: 1,
         backgroundColor: '#00CC93',
     },
     containerlogo: {
@@ -41,7 +42,7 @@ const styles= StyleSheet.create ({
         borderTopRightRadius: 25,
         paddingStart: '5%',
         paddingEnd: '5%',
-    }, 
+    },
     title: {
         fontSize: 24,
         fontWeight: 'bold',

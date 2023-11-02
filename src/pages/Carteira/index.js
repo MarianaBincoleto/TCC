@@ -9,33 +9,32 @@ import PieChart from 'react-native-pie-chart'
 
 export default function Carteira() {
     const navigation = useNavigation();
-    const Porcentagem = ["5%", "10%", "15%"]
-    const [userPorcentagem, setPorcentagem] = useState('');
+    const percents = [5, 10, 15];
+    const Porcentagem = percents.map(percent => `${percent}%`) // ['5%', '10%', '15%']
+    const [userPorcentagem, setUserPorcentagem] = useState('');
     const [userSalario, setSalario] = useState('');
-    const [userResult, setResult] = useState('');
     const widthAndHeight = 250;
-    const series = [100,0];
-    const [data, setData] = useState([]);
-    const sliceColor = ['#006400','#32CD32'];
-
+    const [data, setData] = useState([1, 1]);
+    const sliceColor = ['#006400', '#32CD32'];
 
     function handleSalario() {
         if (userPorcentagem === '5%') {
-            const result = userSalario.replace(',', '.') * 0.05
-            setData([parseFloat(userSalario - result),result])
-            console.log('socorro',userSalario)
+            const userSalarioParsed = parseFloat(userSalario);
+            const result = userSalarioParsed * 0.05;
+            const total = parseFloat(userSalarioParsed - result);
+            setData([total, result]);
         } else if (userPorcentagem === '10%') {
-            const result = userSalario.replace(',', '.') * 0.10
-            setData([parseFloat(userSalario - result),result])
-            console.log(result)
+            const userSalarioParsed = parseFloat(userSalario);
+            const result = userSalarioParsed * 0.10;
+            const total = parseFloat(userSalarioParsed - result);
+            setData([total, result]);
         } else {
-            const result = userSalario.replace(',', '.') * 0.15
-            setData([parseFloat(userSalario - result),result])
-            console.log(result)
+            const userSalarioParsed = parseFloat(userSalario);
+            const result = userSalarioParsed * 0.15;
+            const total = parseFloat(userSalarioParsed - result);
+            setData([total, result]);
         }
     }
-    console.log(data);
-
     return (
         <ScrollView showsVerticalScrollIndicator={false} style={styles.containerPorcentagem}>
             <View style={styles.titleBar}>
@@ -49,8 +48,7 @@ export default function Carteira() {
                         buttonStyle={{ borderRadius: 20, backgroundColor: '#CACACA' }}
                         data={Porcentagem}
                         onSelect={(selectedItem, index) => {
-                            console.log(selectedItem, index);
-                            setPorcentagem(selectedItem);
+                            setUserPorcentagem(selectedItem);
                         }}
                         value={userPorcentagem}
                     />
@@ -63,21 +61,21 @@ export default function Carteira() {
                     onChangeText={setSalario}
                     keyboardType='numeric'
                 />
-                <TouchableOpacity style={styles.buttonSalario} onPress={() => handleSalario()}>
+                <TouchableOpacity style={styles.buttonSalario} onPress={() => { handleSalario(); setSalario('') }}>
                     <Text style={styles.registerSalario}>Salvar</Text>
                 </TouchableOpacity>
 
             </View>
 
             <View style={styles.grafico}>
-            {/* <PieChart widthAndHeight={widthAndHeight} series={series} sliceColor={sliceColor} /> */}
-            <PieChart
-            widthAndHeight={widthAndHeight}
-            series={data}
-            sliceColor={sliceColor}
-            // coverRadius={0.45}
-            coverFill={'#FFF'}
-            />
+                {/* <PieChart widthAndHeight={widthAndHeight} series={series} sliceColor={sliceColor} /> */}
+                <PieChart
+                    widthAndHeight={widthAndHeight}
+                    series={data || []}
+                    sliceColor={sliceColor}
+                    // coverRadius={0.45}
+                    coverFill={'#FFF'}
+                />
             </View>
 
         </ScrollView>
@@ -113,7 +111,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 18,
         fontWeight: 'bold',
-    }, 
+    },
     grafico: {
         top: 100,
         justifyContent: 'space-between',
