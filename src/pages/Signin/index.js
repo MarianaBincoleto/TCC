@@ -6,11 +6,13 @@ import { useNavigation } from '@react-navigation/native';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebaseConnection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function Signin() {
     const navigation = useNavigation();
     const [userEmail, setEmail] = useState('');
     const [userPassword, setPassword] = useState('');
+    const [hidePassword, setHidePassword] = useState(true);
 
     function userLogin() {
         // navigation.navigate('Home');
@@ -51,13 +53,20 @@ export default function Signin() {
                     value={userEmail}
                     onChangeText={setEmail}
                 />
-
-                <Text style={styles.title}> Senha </Text>
-                <TextInput style={styles.input}
-                    placeholder="Digite sua senha..."
-                    value={userPassword}
-                    onChangeText={setPassword}
-                />
+                <View>
+                    <Text style={styles.title}> Senha </Text>
+                    <View style={styles.inputPassEntrar}>
+                        <TextInput style={styles.inputTextEntrar}
+                            placeholder="Digite sua senha..."
+                            value={userPassword}
+                            onChangeText={setPassword}
+                            secureTextEntry={hidePassword}
+                        />
+                        <TouchableOpacity style={styles.olhoEntrar} onPress={() => setHidePassword(!hidePassword)}>
+                            <Ionicons name='eye' color='#00CC93' size={25} />
+                        </TouchableOpacity>
+                    </View>
+                </View>
 
                 <TouchableOpacity style={styles.button} onPress={userLogin}>
                     <Text style={styles.buttonText}>Acessar</Text>
@@ -129,5 +138,24 @@ const styles = StyleSheet.create({
     },
     registerText: {
         color: '#A1A1A1',
-    }
+    },
+    inputTextEntrar: {
+        borderBottomWidth: 1,
+        height: 50,
+        marginBottom: 12,
+        fontSize: 16,
+        width: '98%',
+    },
+    olhoEntrar: {
+        width: '20%',
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    inputPassEntrar: {
+        flexDirection: 'row',
+        width: '90%',
+        height: 50,
+        alignItems: 'center',
+    },
 })

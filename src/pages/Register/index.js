@@ -1,113 +1,131 @@
 import React from 'react';
-import {useState} from 'react';
-import {View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView} from 'react-native';
+import { useState } from 'react';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, } from 'react-native';
 import * as Animatable from 'react-native-animatable'
-import {useNavigation} from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebaseConnection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Ionicons } from '@expo/vector-icons';
 
-export default function Register(){
+export default function Register() {
     const navigation = useNavigation();
     const [userNome, setNome] = useState('');
     const [userDt_Nasc, setDt_Nasc] = useState('');
     const [userEmail, setEmail] = useState('');
     const [userPassword, setPassword] = useState('');
     const [userConfPassword, setConfPassword] = useState('');
+    const [hidePassword, setHidePassword] = useState(true);
 
-function newUSer(){
-    if (userNome === '' || userDt_Nasc ==='' || userEmail ==='' || userPassword === '' || userConfPassword ===''){
-        alert("Todos os campos devem ser preenchidos");
-        return;
+    function newUSer() {
+        if (userNome === '' || userDt_Nasc === '' || userEmail === '' || userPassword === '' || userConfPassword === '') {
+            alert("Todos os campos devem ser preenchidos");
+            return;
+        }
+        if (userPassword !== userConfPassword) {
+            alert("A senha e a confirmação não são iguais");
+            return;
+        } else {
+            createUserWithEmailAndPassword(auth, userEmail, userPassword)
+                .then((USerCredential) => {
+                    const user = USerCredential.user;
+                    alert("O usuário " + userEmail + " foi criado. Faça o login");
+
+                    const data = {
+                        id: userEmail,
+                        nome: userNome,
+                        data_nascimento: userDt_Nasc
+                    }
+                    AsyncStorage.setItem(userEmail, JSON.stringify(data));
+
+                    navigation.navigate('Signin');
+                })
+                .catch((error) => {
+                    const errorMessage = error.message;
+                    alert(errorMessage);
+                    navigation.navigate('Register');
+                })
+        }
     }
-    if (userPassword !==userConfPassword){
-        alert("A senha e a confirmação não são iguais");
-        return;
-    } else {
-        createUserWithEmailAndPassword(auth, userEmail, userPassword)
-        .then ((USerCredential) => {
-            const user = USerCredential.user;
-            alert("O usuário " + userEmail +" foi criado. Faça o login");
-
-            const data = {
-                id: userEmail,
-                nome: userNome,
-                data_nascimento: userDt_Nasc
-              }
-            AsyncStorage.setItem(userEmail, JSON.stringify(data));
-
-            navigation.navigate('Signin');
-        })
-        .catch((error) => {
-            const errorMessage = error.message;
-            alert(errorMessage);
-            navigation.navigate('Register');
-        })
-    }
-}
 
 
-    return(
+    return (
         <KeyboardAvoidingView style={styles.container}
-        behavior={Platform.OS =="ios" ? "padding" : "height"}
-        keyboardVerticalOffset={80}
-        > 
-        <ScrollView>
-            <Animatable.View animation="fadeInLeft" delay={500} style={styles.containerHeader}>
-                <Text style={styles.message}> Bem-vindo(a) </Text>
-            </Animatable.View>
+            behavior={Platform.OS == "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={80}
+        >
+            <ScrollView>
+                <Animatable.View animation="fadeInLeft" delay={500} style={styles.containerHeader}>
+                    <Text style={styles.message}> Bem-vindo(a) </Text>
+                </Animatable.View>
 
-            <Animatable.View animation="fadeInUp" style={styles.containerform}>
-                <Text style={styles.title}> Nome </Text>
-                <TextInput style={styles.input}
-                placeholder="Digite seu nome..."
-                value={userNome}
-                onChangeText={setNome}
-                />
+                <Animatable.View animation="fadeInUp" style={styles.containerform}>
+                    <Text style={styles.title}> Nome </Text>
+                    <TextInput style={styles.input}
+                        placeholder="Digite seu nome..."
+                        value={userNome}
+                        onChangeText={setNome}
+                    />
 
-                <Text style={styles.title}> Data de Nascimento </Text>
-                <TextInput style={styles.input}
-                placeholder="Digite sua data de nascimento..."
-                value={userDt_Nasc}
-                onChangeText={setDt_Nasc}
-                />
+                    <Text style={styles.title}> Data de Nascimento </Text>
+                    <TextInput style={styles.input}
+                        placeholder="Digite sua data de nascimento..."
+                        value={userDt_Nasc.toString().replace(/(\d{2})(\d{2})(\d{4})/, '$1/$2/$3')}
+                        onChangeText={setDt_Nasc}
+                    />
 
-                <Text style={styles.title}> Email </Text>
-                <TextInput style={styles.input}
-                placeholder="Digite um e-mail..."
-                keyboardType='email-address'
-                autoCapitalize='none'
-                autoComplete='email'
-                value={userEmail}
-                onChangeText={setEmail}
-                />
+                    <Text style={styles.title}> Email </Text>
+                    <TextInput style={styles.input}
+                        placeholder="Digite um e-mail..."
+                        keyboardType='email-address'
+                        autoCapitalize='none'
+                        autoComplete='email'
+                        value={userEmail}
+                        onChangeText={setEmail}
+                    />
 
-                <Text style={styles.title}> Senha </Text>
-                <TextInput style={styles.input}
-                placeholder="Digite sua senha..."
-                value={userPassword}
-                onChangeText={setPassword}
-                />
+                    <View>
+                        <Text style={styles.title}> Senha </Text>
+                        <View style={styles.inputPass}>
+                            <TextInput style={styles.inputText}
+                                placeholder="Digite sua senha..."
+                                value={userPassword}
+                                onChangeText={setPassword}
+                                secureTextEntry={hidePassword}
+                            />
+                            <TouchableOpacity style={styles.olho} onPress={() => setHidePassword(!hidePassword)}>
+                                <Ionicons name='eye' color='#00CC93' size={25} />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
 
-                <Text style={styles.title}> Confirme senha </Text>
-                <TextInput style={styles.input}
-                placeholder="Confirme sua senha..."
-                value={userConfPassword}
-                onChangeText={setConfPassword}
-                />                
+                    <View>
+                        <Text style={styles.title}> Confirme senha </Text>
+                        <View style={styles.inputPass}>
+                            <TextInput style={styles.inputText}
+                                placeholder="Confirme sua senha..."
+                                value={userConfPassword}
+                                onChangeText={setConfPassword}
+                                secureTextEntry={hidePassword}
+                            />
+                            <TouchableOpacity style={styles.olho} onPress={() => setHidePassword(!hidePassword)}>
+                                <Ionicons name='eye' color='#00CC93' size={25} />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
 
-                <TouchableOpacity style={styles.button} onPress={newUSer}>
-                    <Text style={styles.buttonText}>Cadastrar</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity style={styles.button} onPress={newUSer}>
+                        <Text style={styles.buttonText}>Cadastrar</Text>
+                    </TouchableOpacity>
 
-            </Animatable.View>
+                </Animatable.View>
 
             </ScrollView>
         </KeyboardAvoidingView>
     );
 }
 
-const styles=StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#00CC93',
@@ -119,10 +137,10 @@ const styles=StyleSheet.create({
     },
     message: {
         fontSize: 28,
-        fontWeight:'bold',
+        fontWeight: 'bold',
         color: '#fff',
     },
-    containerform:{
+    containerform: {
         backgroundColor: '#fff',
         flex: 1,
         borderTopLeftRadius: 25,
@@ -141,7 +159,7 @@ const styles=StyleSheet.create({
         fontSize: 16,
     },
     button: {
-        backgroundColor:'#00CC93',
+        backgroundColor: '#00CC93',
         width: '100%',
         borderRadius: 8,
         paddingVertical: 8,
@@ -160,5 +178,24 @@ const styles=StyleSheet.create({
     },
     registerText: {
         color: '#A1A1A1',
+    },
+    inputPass: {
+        flexDirection: 'row',
+        width: '90%',
+        height: 50,
+        alignItems: 'center',
+    },
+    inputText: {
+        borderBottomWidth: 1,
+        height: 50,
+        marginBottom: 12,
+        fontSize: 16,
+        width: '98%',
+    },
+    olho: {
+        width: '20%',
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 })
