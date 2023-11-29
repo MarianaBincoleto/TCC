@@ -76,6 +76,11 @@ export default function Carteira() {
                     // coverRadius={0.45}
                     coverFill={'#FFF'}
                 />
+                {/* Legenda da Porcentagem */}
+                <Text style={styles.porcentagemLegend}>{userPorcentagem}</Text>
+
+                {/* Legenda do Valor que Ficou */}
+                <Text style={styles.valorFicouLegend}>Valor disponível: R${data[0].toFixed(2)}</Text>
             </View>
 
         </ScrollView>
@@ -116,5 +121,19 @@ const styles = StyleSheet.create({
         top: 100,
         justifyContent: 'space-between',
         marginLeft: 80,
-    }
+    },
+    porcentagemLegend: {
+        marginTop: 5,
+        fontSize: 16,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        color: '#52575D',
+    },
+    valorFicouLegend: {
+        marginTop: 5,
+        fontSize: 16,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        color: '#52575D',
+    },
 })
